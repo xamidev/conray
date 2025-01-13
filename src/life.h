@@ -37,5 +37,8 @@
 
 void spawnTestGlider(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int posX, int posY);
 void drawGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
+int countCellNeighbors(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int posX, int posY);
+void updateGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
+void copyGrid(int src[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int dest[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
 
 #endif // LIFE_H

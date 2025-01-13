@@ -40,6 +40,26 @@ void spawnTestGlider(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int posX, int p
     grid[posX+2][posY+2] = ALIVE_CELL;
 }
 
+int countCellNeighbors(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int posX, int posY)
+{
+    int neighbors = 0;
+
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            if (i == 0 && j == 0) continue;
+            int newX = posX + i;
+            int newY = posY + j;
+            if (newX >= 0 && newX < AMOUNT_OF_CELLS && newY >= 0 && newY < AMOUNT_OF_CELLS) {
+                neighbors += grid[newX][newY]; // because ALIVE is 1
+            }
+        }
+    }
+
+    return neighbors;
+}
+
 void drawGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS])
 {
     for (size_t i=0; i<AMOUNT_OF_CELLS; i++)
@@ -53,4 +73,41 @@ void drawGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS])
             }
         }
     }
+}
+
+void copyGrid(int src[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int dest[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS])
+{
+    for (size_t i=0; i<AMOUNT_OF_CELLS; i++)
+    {
+        for (size_t j=0; j<AMOUNT_OF_CELLS; j++)
+        {
+            dest[i][j] = src[i][j];
+        }
+    }
+}
+
+void updateGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]) {
+    int temp[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS] = {0};
+
+    for (int i = 0; i < AMOUNT_OF_CELLS; i++) {
+        for (int j = 0; j < AMOUNT_OF_CELLS; j++) {
+            int neighbors = countCellNeighbors(grid, i, j);
+
+            if (grid[i][j] == ALIVE_CELL) {
+                if (neighbors < 2 || neighbors > 3) {
+                    temp[i][j] = DEAD_CELL;
+                } else {
+                    temp[i][j] = ALIVE_CELL;
+                }
+            } else if (grid[i][j] == DEAD_CELL) {
+                if (neighbors == 3) {
+                    temp[i][j] = ALIVE_CELL;
+                } else {
+                    temp[i][j] = DEAD_CELL;
+                }
+            }
+        }
+    }
+
+    copyGrid(temp, grid);
 }

@@ -30,6 +30,18 @@
 #include "raylib.h"
 #include "resource_dir.h"
 #include "life.h"
+#include <stdio.h>
+
+/*
+Next up we should be able to:
+	- pause/play simulation
+	- see last fresh dead cells as decaying colors
+	- set simulation speed
+	- left click to set cell to alive/dead (toggle)
+	- right click to move through a huge void
+	- randomly generate soup at specific keypress
+	- have a geneartion counter
+*/
 
 int main(void)
 {
@@ -49,7 +61,7 @@ int main(void)
 	Load a texture from the resources directory
 	Texture wabbit = LoadTexture("wabbit_alpha.png");
 	*/
-	
+	SetTargetFPS(1);
 	// game loop
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
@@ -60,6 +72,8 @@ int main(void)
 		ClearBackground(RED);
 
 		drawGrid(grid);
+		updateGrid(grid);
+		//printf("NEIGHBORS=%d\n", countCellNeighbors(grid, 6, 6));
 
 		// draw some text using the default font
 		// DrawText("Game",0,0,20,RED);
