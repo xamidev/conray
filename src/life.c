@@ -134,3 +134,18 @@ void initSoup(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS])
         }
     }
 }
+
+void toggleCell(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int posX, int posY)
+{
+    switch(grid[posX][posY])
+    {
+        case ALIVE_CELL:
+            grid[posX][posY] = DEAD_CELL;
+            break;
+        case DEAD_CELL:
+            grid[posX][posY] = ALIVE_CELL;
+            break;
+        default:
+            break;
+    }
+}

@@ -43,5 +43,6 @@ void updateGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
 void copyGrid(int src[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int dest[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
 void clearGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
 void initSoup(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
+void toggleCell(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int posX, int posY);
 
 #endif // LIFE_H

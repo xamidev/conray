@@ -35,72 +35,112 @@
 #include <stdlib.h>
 
 /*
-Next up we should be able to:
-	- pause/play simulation
 	- see last fresh dead cells as decaying colors
-	- set simulation speed
-	- left click to set cell to alive/dead (toggle)
-	- right click to move through a huge void
-	- randomly generate soup at specific keypress
 	- have a geneartion counter
 */
 
+typedef enum GameScreen
+{
+	TITLE = 0,
+	GAME
+} GameScreen;
+
 int main(void)
 {
+	static bool paused = false;
 	srand(time(NULL));
 	int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS] = {DEAD_CELL};
+
+	GameScreen currentScreen = TITLE;
 	
-	spawnTestGlider(grid, 5, 5);		
+	spawnTestGlider(grid, 5, 5);
+	static int screenSize = AMOUNT_OF_CELLS*CELL_SIZE_PIXELS;	
 
 	// Tell the window to use vsync and work on high DPI displays
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	// Create the window and OpenGL context
-	InitWindow(AMOUNT_OF_CELLS*CELL_SIZE_PIXELS, AMOUNT_OF_CELLS*CELL_SIZE_PIXELS, "Conway's Game of Life");
+	InitWindow(screenSize, screenSize, "Conway's Game of Life");
 
-	/*
-	Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
-	SearchAndSetResourceDir("resources");
-
-	Load a texture from the resources directory
-	Texture wabbit = LoadTexture("wabbit_alpha.png");
-	*/
 	SetTargetFPS(TARGET_FPS);
 	// game loop
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
-		// drawing
-		BeginDrawing();
-
-		// Setup the back buffer for drawing (clear color and depth buffers)
-		ClearBackground(RED);
-
-		drawGrid(grid);
-		updateGrid(grid);
-		//printf("NEIGHBORS=%d\n", countCellNeighbors(grid, 6, 6));
-
-		// draw some text using the default font
-		// DrawText("Game",0,0,20,RED);
-
-		// draw our texture to the screen
-		// DrawTexture(wabbit, 400, 200, WHITE);
-
-		if (IsKeyPressed(KEY_N)) {
-			// New Soup
-			clearGrid(grid);
-			initSoup(grid);
+		/* Updates */
+		switch (currentScreen)
+		{
+			case TITLE:
+				if (IsKeyPressed(KEY_SPACE)) {
+					currentScreen = GAME;
+				}
+				break;
+			case GAME:
+				if (IsKeyPressed(KEY_N)) {
+					// New Soup
+					clearGrid(grid);
+					initSoup(grid);
+					ClearBackground(WHITE);
+					drawGrid(grid);
+				}
+				if (IsKeyPressed(KEY_C)) {
+					clearGrid(grid);
+					ClearBackground(WHITE);
+				}
+				if (IsKeyPressed(KEY_P)) {
+					if (paused) {
+						paused = false;
+					} else {
+						paused = true;
+					}
+					updateGrid(grid);
+					drawGrid(grid);
+				}
+				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+				{
+					Vector2 cellPosition = {0.0f, 0.0f};
+					cellPosition = GetMousePosition();
+					printf("Mouse clicked @ x=%.2f y=%.2f\n", cellPosition.x, cellPosition.y);
+					int i = cellPosition.x/CELL_SIZE_PIXELS;
+					int j = cellPosition.y/CELL_SIZE_PIXELS;
+					toggleCell(grid, i, j);
+					drawGrid(grid);
+				}
+				break;
+			default:
+				break;
 		}
-		
-		// end the frame and get ready for the next one  (display frame, poll input, etc...)
+
+		/* Drawing */
+		BeginDrawing();
+		switch (currentScreen)
+		{
+			case TITLE:
+				int titleWidth = MeasureText("Conway's game of Life", 40);
+				DrawRectangle(0, 0, screenSize, screenSize, DARKBLUE);
+				DrawText("Conway's game of Life", (screenSize-titleWidth)/2, 20, 40, WHITE);
+				int controlsWidth = MeasureText("Controls", 30);
+				DrawText("Controls", (screenSize-controlsWidth)/2, 100, 30, WHITE);
+				DrawText("N to spawn soup", 25, 150, 30, WHITE);
+				DrawText("C to clear grid", 25, 200, 30, WHITE);
+				DrawText("P to pause simulation", 25, 250, 30, WHITE);
+				DrawText("Left click to toggle cell", 25, 300, 30, WHITE);
+				int startGameWidth = MeasureText("Press Space to start!", 30);
+				DrawText("Press Space to start!", (screenSize-startGameWidth)/2, 400, 30, WHITE);
+				break;
+			case GAME:
+				if (!paused)
+				{
+					ClearBackground(WHITE);
+					drawGrid(grid);
+					updateGrid(grid);
+				}
+				break;
+			default:
+				break;
+		}
 		EndDrawing();
+		
 	}
 
-	/*
-	cleanup
-	unload our texture so it can be cleaned up
-	UnloadTexture(wabbit);
-	*/
-
-	// destroy the window and cleanup the OpenGL context
 	CloseWindow();
 	return 0;
 }
