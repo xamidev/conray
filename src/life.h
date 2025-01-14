@@ -30,15 +30,18 @@
 #ifndef LIFE_H
 #define LIFE_H
 
-#define CELL_SIZE_PIXELS	20
-#define AMOUNT_OF_CELLS		30
-#define DEAD_CELL		0
-#define ALIVE_CELL		1
+#define CELL_SIZE_PIXELS	10
+#define AMOUNT_OF_CELLS		50
+#define DEAD_CELL		    0
+#define ALIVE_CELL		    1
+#define TARGET_FPS          20
 
 void spawnTestGlider(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int posX, int posY);
 void drawGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
 int countCellNeighbors(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int posX, int posY);
 void updateGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
 void copyGrid(int src[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int dest[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
+void clearGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
+void initSoup(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]);
 
 #endif // LIFE_H

@@ -30,6 +30,7 @@
 #include <stddef.h>
 #include "life.h"
 #include "raylib.h"
+#include <stdlib.h>
 
 void spawnTestGlider(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS], int posX, int posY)
 {
@@ -110,4 +111,26 @@ void updateGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS]) {
     }
 
     copyGrid(temp, grid);
+}
+
+void clearGrid(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS])
+{
+    for (size_t i=0; i<AMOUNT_OF_CELLS; i++)
+    {
+        for (size_t j=0; j<AMOUNT_OF_CELLS; j++)
+        {
+            grid[i][j] = DEAD_CELL;
+        }
+    }
+}
+
+void initSoup(int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS])
+{
+    for (size_t i=0; i<AMOUNT_OF_CELLS; i++)
+    {
+        for (size_t j=0; j<AMOUNT_OF_CELLS; j++)
+        {
+            grid[i][j] = rand() % 101 > 70 ? ALIVE_CELL : DEAD_CELL;
+        }
+    }
 }

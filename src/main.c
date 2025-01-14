@@ -31,6 +31,8 @@
 #include "resource_dir.h"
 #include "life.h"
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 /*
 Next up we should be able to:
@@ -45,6 +47,7 @@ Next up we should be able to:
 
 int main(void)
 {
+	srand(time(NULL));
 	int grid[AMOUNT_OF_CELLS][AMOUNT_OF_CELLS] = {DEAD_CELL};
 	
 	spawnTestGlider(grid, 5, 5);		
@@ -52,7 +55,7 @@ int main(void)
 	// Tell the window to use vsync and work on high DPI displays
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	// Create the window and OpenGL context
-	InitWindow(600, 600, "Conway's Game of Life");
+	InitWindow(AMOUNT_OF_CELLS*CELL_SIZE_PIXELS, AMOUNT_OF_CELLS*CELL_SIZE_PIXELS, "Conway's Game of Life");
 
 	/*
 	Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
@@ -61,7 +64,7 @@ int main(void)
 	Load a texture from the resources directory
 	Texture wabbit = LoadTexture("wabbit_alpha.png");
 	*/
-	SetTargetFPS(1);
+	SetTargetFPS(TARGET_FPS);
 	// game loop
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
@@ -80,6 +83,12 @@ int main(void)
 
 		// draw our texture to the screen
 		// DrawTexture(wabbit, 400, 200, WHITE);
+
+		if (IsKeyPressed(KEY_N)) {
+			// New Soup
+			clearGrid(grid);
+			initSoup(grid);
+		}
 		
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
