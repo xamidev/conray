@@ -78,9 +78,6 @@ ifneq (,$(raylib_config))
 	@${MAKE} --no-print-directory -C build/build_files -f raylib.make config=$(raylib_config)
 endif
 
-run:
-	bin/Debug/conray
-
 clean:
 	@${MAKE} --no-print-directory -C build/build_files -f conray.make clean
 	@${MAKE} --no-print-directory -C build/build_files -f raylib.make clean
